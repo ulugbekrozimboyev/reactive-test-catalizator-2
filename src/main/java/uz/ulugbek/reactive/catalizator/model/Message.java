@@ -14,8 +14,4 @@ public class Message {
     @JsonProperty("data")
     private String data;
 
-
-    public Message(String data){
-        this.data = data;
-    }
 }

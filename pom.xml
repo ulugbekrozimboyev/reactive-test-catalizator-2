@@ -13,9 +13,13 @@
     <version>0.0.1-SNAPSHOT</version>
     <name>catalizator</name>
     <description>catalizator</description>
+
     <properties>
         <java.version>11</java.version>
+        <jjwt-api.version>0.11.5</jjwt-api.version>
+        <flyway.version>9.4.0</flyway.version>
     </properties>
+
     <dependencies>
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -56,7 +60,7 @@
         <dependency>
             <groupId>org.flywaydb</groupId>
             <artifactId>flyway-core</artifactId>
-            <version>9.4.0</version>
+            <version>${flyway.version}</version>
         </dependency>
 
         <dependency>
@@ -67,19 +71,19 @@
         <dependency>
             <groupId>io.jsonwebtoken</groupId>
             <artifactId>jjwt-api</artifactId>
-            <version>0.11.5</version>
+            <version>${jjwt-api.version}</version>
         </dependency>
 
         <dependency>
             <groupId>io.jsonwebtoken</groupId>
             <artifactId>jjwt-impl</artifactId>
-            <version>0.11.5</version>
+            <version>${jjwt-api.version}</version>
         </dependency>
 
         <dependency>
             <groupId>io.jsonwebtoken</groupId>
             <artifactId>jjwt-jackson</artifactId>
-            <version>0.11.5</version>
+            <version>${jjwt-api.version}</version>
         </dependency>
 
         <dependency>

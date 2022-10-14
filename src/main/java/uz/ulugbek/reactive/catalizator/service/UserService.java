@@ -9,7 +9,7 @@ import uz.ulugbek.reactive.catalizator.repository.UserRepository;
 @Service
 public class UserService implements ReactiveUserDetailsService {
 
-    private UserRepository userRepository;
+    private final UserRepository userRepository;
 
     public UserService(UserRepository userRepository) {
         this.userRepository = userRepository;
@@ -17,9 +17,7 @@ public class UserService implements ReactiveUserDetailsService {
 
     @Override
     public Mono<UserDetails> findByUsername(String username) {
-        Mono<UserDetails> userDetails = userRepository.findByUsername(username)
+        return userRepository.findByUsername(username)
                 .cast(UserDetails.class);
-
-        return userDetails;
     }
 }
