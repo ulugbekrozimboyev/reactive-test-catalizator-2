@@ -6,8 +6,30 @@
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Document</title>
+
+    <script type="text/javascript">
+
+        var OnsubmitFun = function (e) {
+            var payload = {
+                method: 'POST',
+                headers: {'Content-type': 'application/x-www-form-urlencoded'},
+                body: `username=${e.username.value}&password=${e.password.value}`
+
+            };
+            fetch('/login', payload).then(resp => resp.text()).catch(text => console.log(text));
+            return false;
+        }
+
+    </script>
+
 </head>
 <body>
 Hello, {{user}}!
+<form onsubmit="OnsubmitFun(this); return false;">
+
+    <input type="text" name="username"/>
+    <input type="password" name="password"/>
+    <input type="submit" value="Sign in"/>
+</form>
 </body>
 </html>
