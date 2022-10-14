@@ -1,16 +1,26 @@
 package uz.ulugbek.reactive.catalizator.config;
 
 import org.springframework.context.annotation.Bean;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.config.annotation.method.configuration.EnableReactiveMethodSecurity;
 import org.springframework.security.config.annotation.web.reactive.EnableWebFluxSecurity;
 import org.springframework.security.config.web.server.ServerHttpSecurity;
 import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.server.SecurityWebFilterChain;
+import reactor.core.publisher.Mono;
 
 @EnableWebFluxSecurity
 @EnableReactiveMethodSecurity
 public class WebSecurityConfig {
+
+    private final AuthManager authManager;
+    private final SecurityContextRepository securityContextRepository;
+
+    public WebSecurityConfig(AuthManager authManager, SecurityContextRepository securityContextRepository) {
+        this.authManager = authManager;
+        this.securityContextRepository = securityContextRepository;
+    }
 
     @Bean
     public PasswordEncoder passwordEncoder(){
@@ -20,9 +30,23 @@ public class WebSecurityConfig {
     @Bean
     public SecurityWebFilterChain securityWebFilterChain(ServerHttpSecurity serverHttpSecurity){
         return serverHttpSecurity
+                .exceptionHandling()
+                .authenticationEntryPoint(
+                        (swe, e) -> Mono.fromRunnable(
+                                () -> swe.getResponse().setStatusCode(HttpStatus.UNAUTHORIZED)
+                        )
+                )
+                .accessDeniedHandler(
+                        (swe, e) -> Mono.fromRunnable(
+                                () -> swe.getResponse().setStatusCode(HttpStatus.FORBIDDEN)
+                        )
+                )
+                .and()
                 .csrf().disable()
-                .formLogin().and()
+                .formLogin().disable()
                 .httpBasic().disable()
+                .authenticationManager(authManager)
+                .securityContextRepository(securityContextRepository)
                 .authorizeExchange()
                 .pathMatchers("/", "/login", "/favicon.ico").permitAll()
                 .pathMatchers("/web").hasRole("ADMIN")
